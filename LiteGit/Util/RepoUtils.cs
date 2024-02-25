@@ -45,22 +45,29 @@ namespace LiteGit.Util
             return allRemoteBranches;
         }
 
-        public static void Pull(Repository repository, string branch)
+        public static void Pull(Repository repository, string branchName)
         {
             try
             {
+                branchName = "origin/" + branchName;
+                var trackingBranch = repository.Branches[branchName];
+   
+                if (trackingBranch.IsRemote) // even though I dont want to set tracking branch like this
+                {
+                    var branch = repository.Head;
+                    repository.Branches.Update(branch, b => b.TrackedBranch = trackingBranch.CanonicalName);
+                }
                 PullOptions pullOptions = new PullOptions()
                 {
                     MergeOptions = new MergeOptions()
                     {
                         FastForwardStrategy = FastForwardStrategy.Default
                     }
-
-
                 };
+
                 MergeResult mergeResult = Commands.Pull(
                     repository,
-                    new Signature("ifs-satrlk", "satheesh.rathnasiri@ifs.com", DateTimeOffset.Now),
+                    new Signature("shatheeshsohan", "usohanac@gmail.com", DateTimeOffset.Now),
                     pullOptions
                 );
             }
@@ -81,8 +88,8 @@ namespace LiteGit.Util
                     (url, usernameFromUrl, types) =>
                         new UsernamePasswordCredentials()
                         {
-                            Username = "username",
-                            Password = "password"
+                            Username = "shatheeshsohan",
+                            Password = "fucksex145@123"
                         });
 
                 var remote = repository.Network.Remotes["origin"];

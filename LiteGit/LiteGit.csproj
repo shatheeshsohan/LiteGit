@@ -87,6 +87,7 @@
     </ApplicationDefinition>
     <Compile Include="BaseCache\SCache.cs" />
     <Compile Include="Util\RepoUtils.cs" />
+    <Compile Include="Util\Utils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -127,6 +128,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Refresh_Modern.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Refresh_Modern.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

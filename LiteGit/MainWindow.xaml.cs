@@ -94,7 +94,11 @@ namespace LiteGit
                 string currentRepo = (string)BaseCombo.SelectedItem;
                 var repo = new Repository(currentRepo);
                 RepoUtils.CheckoutBranch(repo, CheckOutTextBox.Text);
-                LocalBranchesListBox.Items.Add(CheckOutTextBox.Text);
+                bool isItemAlreadyExists = Utils.IsItemExists(LocalBranchesListBox, CheckOutTextBox.Text);
+                if (!isItemAlreadyExists) 
+                {
+                    LocalBranchesListBox.Items.Add(CheckOutTextBox.Text);
+                }
             }
             catch (Exception)
             {
@@ -150,6 +154,18 @@ namespace LiteGit
             {
                 System.Windows.Forms.MessageBox.Show(ex.Message, "Fetch Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void ChangeRefeshButton_Click(object sender, RoutedEventArgs e)
+        {
+            string currentRepo = (string)BaseCombo.SelectedItem;
+            var repo = new Repository(currentRepo);
+            LocalBranchesListBox.Items.Clear();
+            foreach (var item in repo.RetrieveStatus())
+            {
+                LocalChangesListBox.Items.Add(item.FilePath);
+            }
+
         }
     }
 }
