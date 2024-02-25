@@ -5,18 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LiteGit
 {
@@ -47,7 +38,14 @@ namespace LiteGit
 
                 foreach (BaseComboItem item in allReleasePaths)
                 {
-                    BaseCombo.Items.Add(item.Path);
+                    if (item.Release == "git") 
+                    {
+                        BaseCache.SCache.SetItemsForCache("git", item.Path);
+                    }
+                    else 
+                    {
+                        BaseCombo.Items.Add(item.Path);
+                    }
                 }
 
                 BaseCombo.SelectedIndex = 0;

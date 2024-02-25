@@ -15,7 +15,7 @@
         <StatusBar x:Name="BottomStatusBar" BorderBrush="Black" Height="25" Margin="0,0,0,0.8" VerticalAlignment="Bottom"/>
         <Button x:Name="CheckoutButton" Content="Checkout" Margin="90,0,0,52.8" VerticalAlignment="Bottom" Click="CheckoutButton_Click" HorizontalAlignment="Left" Width="75"/>
         <Label x:Name="FetchedCurrentBranch" Content="Label" HorizontalAlignment="Left" Margin="0,0,0,-0.2" Width="798" RenderTransformOrigin="0.429,0.667" VerticalAlignment="Bottom"/>
-        <Label x:Name="CheckOutBranchLabel" Content="Checkout Branch" Margin="9,41,663,365.8"/>
+        <Label x:Name="CheckOutBranchLabel" Content="Checkout Branch" Margin="9,41,663,0" Height="27" VerticalAlignment="Top"/>
         <ProgressBar x:Name="BaseProgressBar" Margin="0,0,0,30.8" Height="17" VerticalAlignment="Bottom"/>
         <ListBox x:Name="LocalBranchesListBox" Margin="10,73,25,191.8" MouseDoubleClick="LocalBranchesListBox_MouseDoubleClick"/>
         <TextBox x:Name="CheckOutTextBox" Margin="135,41,26,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="27"/>
