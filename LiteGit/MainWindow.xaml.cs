@@ -50,10 +50,11 @@ namespace LiteGit
 
                 BaseCombo.SelectedIndex = 0;
                 FetchedCurrentBranch.Content = "Current branch is not fetched yet.";
+                RemoteFilterText.Text = string.Empty;
             }
             catch (FileNotFoundException e)
             {
-                System.Windows.Forms.MessageBox.Show("litegit.properties not cound in C/IFS", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Windows.Forms.MessageBox.Show("litegit.properties not cound in C/IFS" + e.Message.ToString(), "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);
             }
 
@@ -63,7 +64,10 @@ namespace LiteGit
         {
             this.BottomStatusBar.BorderThickness = new Thickness(0.5);
             string currentRepo = (string)BaseCombo.SelectedItem;
+            LocalBranchesListBox.Items.Clear();
             RepoUtils.GetAllLocalBranches(currentRepo).ForEach(item => LocalBranchesListBox.Items.Add(item));
+            RemoteBranchesListBox.Items.Clear();
+            RepoUtils.GetAllRemoteBranches(currentRepo, BaseCache.SCache.GetItemsFromCache("git"), RemoteFilterText.Text).ForEach(item => RemoteBranchesListBox.Items.Add(item));
         }
 
         private void StatusButton_Click(object sender, RoutedEventArgs e)
@@ -102,9 +106,13 @@ namespace LiteGit
             CheckOutTextBox.Text = (string) LocalBranchesListBox.SelectedItem;
         }
 
-        private void LocalBranchesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void RemoteBranchesListBox_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
-
+            DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("You are going to pull " + "'" + (string)RemoteBranchesListBox.SelectedItem + "'"+ " remote branch.", "Remote Checkout", MessageBoxButtons.YesNo);
+            if (dialogResult == System.Windows.Forms.DialogResult.Yes)
+            {
+                CheckOutTextBox.Text = (string)RemoteBranchesListBox.SelectedItem;
+            }
         }
 
         private void PullButton_Click(object sender, RoutedEventArgs e)
@@ -119,6 +127,13 @@ namespace LiteGit
             {
                 System.Windows.Forms.MessageBox.Show(ex.Message, "Pull Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void RemoteFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            string currentRepo = (string)BaseCombo.SelectedItem;
+            RemoteBranchesListBox.Items.Clear();
+            RepoUtils.GetAllRemoteBranches(currentRepo, BaseCache.SCache.GetItemsFromCache("git"), RemoteFilterText.Text).ForEach(item => RemoteBranchesListBox.Items.Add(item));
         }
     }
 }

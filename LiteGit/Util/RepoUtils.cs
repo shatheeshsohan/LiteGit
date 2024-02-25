@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using LibGit2Sharp;
 namespace LiteGit.Util
 {
@@ -29,6 +30,18 @@ namespace LiteGit.Util
                 repo.Dispose();
             }
             return allLocalBranches;
+        }
+
+        public static List<string> GetAllRemoteBranches(string repoDir,string remoteRepo, string filter)
+        {
+            var repo = new Repository(repoDir);
+            var refs = repo.Network.ListReferences(remoteRepo).ToList();
+            List<string> allRemoteBranches = new List<string>();
+            if (repo != null && refs != null && !string.IsNullOrEmpty(filter))
+            {
+                allRemoteBranches = refs.Select(remoteRef => remoteRef.CanonicalName.Replace("refs/heads/", "")).Where(selectedRef => selectedRef != "HEAD" && selectedRef.Contains(filter)).ToList();
+            }
+            return allRemoteBranches;
         }
 
         public static void Pull(Repository repository, string branch)
