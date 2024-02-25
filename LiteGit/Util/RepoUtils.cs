@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using LibGit2Sharp;
+using LibGit2Sharp.Handlers;
 namespace LiteGit.Util
 {
     class RepoUtils
@@ -69,12 +70,43 @@ namespace LiteGit.Util
             }
         }
 
+        public static void Fetch(Repository repository, string branch)
+        {
+            try
+            {
+                var options = new FetchOptions();
+                options.Prune = true;
+                options.TagFetchMode = TagFetchMode.Auto;
+                options.CredentialsProvider = new CredentialsHandler(
+                    (url, usernameFromUrl, types) =>
+                        new UsernamePasswordCredentials()
+                        {
+                            Username = "username",
+                            Password = "password"
+                        });
+
+                var remote = repository.Network.Remotes["origin"];
+                var msg = "Fetching remote";
+                var refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
+                Commands.Fetch(repository, remote.Name, refSpecs, options, msg);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public static string CheckoutBranch(Repository repository, string branchName)
         {
             try
             {
                 var trackingBranch = repository.Branches[branchName];
-                if (trackingBranch.IsRemote)
+                if (trackingBranch == null) 
+                {
+                    branchName = "origin/" + branchName;
+                    trackingBranch = repository.Branches[branchName];
+                }
+                if (trackingBranch != null && trackingBranch.IsRemote)
                 {
                     branchName = branchName.Replace("origin/", string.Empty);
                     var branch = repository.CreateBranch(branchName, trackingBranch.Tip);

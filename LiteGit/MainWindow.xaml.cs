@@ -1,4 +1,5 @@
 ﻿using LibGit2Sharp;
+using LibGit2Sharp.Handlers;
 using LiteGit.Model;
 using LiteGit.Util;
 using System;
@@ -93,6 +94,7 @@ namespace LiteGit
                 string currentRepo = (string)BaseCombo.SelectedItem;
                 var repo = new Repository(currentRepo);
                 RepoUtils.CheckoutBranch(repo, CheckOutTextBox.Text);
+                LocalBranchesListBox.Items.Add(CheckOutTextBox.Text);
             }
             catch (Exception)
             {
@@ -134,6 +136,20 @@ namespace LiteGit
             string currentRepo = (string)BaseCombo.SelectedItem;
             RemoteBranchesListBox.Items.Clear();
             RepoUtils.GetAllRemoteBranches(currentRepo, BaseCache.SCache.GetItemsFromCache("git"), RemoteFilterText.Text).ForEach(item => RemoteBranchesListBox.Items.Add(item));
+        }
+
+        private void FetchButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string currentRepo = (string)BaseCombo.SelectedItem;
+                var repo = new Repository(currentRepo);
+                RepoUtils.Fetch(repo, CheckOutTextBox.Text);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message, "Fetch Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
